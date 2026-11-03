@@ -36,6 +36,7 @@
   --d-bg:#26315A; --d-fg:#CCD7FF; --s-bg:#552A22; --s-fg:#FFCFC4;
   --done:#7D8882; color-scheme:dark }
 html,body{background:var(--bg)}
+[hidden]{display:none!important}
 body{color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45;
   padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:16px 40px;-webkit-tap-highlight-color:transparent}
 .app{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
@@ -47,10 +48,10 @@ body{color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45;
 h1{position:relative;margin:0;font-family:var(--display);font-weight:700;font-size:28px;line-height:1.1}
 .hero p.sub{position:relative;margin:0;font-size:15px;max-width:30ch}
 .nowrap{white-space:nowrap}
-.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:var(--line);padding:4px;border-radius:999px}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:var(--line);padding:4px;border-radius:999px}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
-.tab{min-height:44px;border:0;border-radius:999px;background:transparent;font-weight:800;font-size:15px}
+.tab{min-height:44px;border:0;border-radius:999px;background:transparent;font-weight:800;font-size:14px;padding:0 4px}
 .tab[aria-selected="true"]{background:var(--brand);color:var(--on-brand)}
 .days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
 .day{min-height:48px;border:0;border-radius:14px;background:var(--surface);font-family:var(--display);font-weight:700;font-size:16px}
@@ -97,6 +98,7 @@ h2{margin:0;font-family:var(--display);font-weight:700;font-size:22px;text-wrap:
     <button class="tab" role="tab" id="tab-menu" data-tab="menu">Меню</button>
     <button class="tab" role="tab" id="tab-shop" data-tab="shop">Продукты</button>
     <button class="tab" role="tab" id="tab-recipes" data-tab="recipes">Рецепты</button>
+    <button class="tab" role="tab" id="tab-tips" data-tab="tips">Советы</button>
   </nav>
 
   <section id="view-menu" class="stack" aria-labelledby="tab-menu">
@@ -117,7 +119,10 @@ h2{margin:0;font-family:var(--display);font-weight:700;font-size:22px;text-wrap:
     <h2>Рецепты</h2>
     <p class="note">На 1 порцию. Для обеда с собой готовьте сразу двойную.</p>
     <div class="stack" id="recipes"></div>
-    <h2>Правила</h2>
+  </section>
+
+  <section id="view-tips" class="stack" aria-labelledby="tab-tips" hidden>
+    <h2>Советы</h2>
     <div class="tips" id="tips"></div>
   </section>
 </main>
@@ -221,10 +226,10 @@ h2{margin:0;font-family:var(--display);font-weight:700;font-size:22px;text-wrap:
   function showTab(name){
     state.tab = name; save('tab', name);
     Array.prototype.forEach.call(tabs, function(t){ t.setAttribute('aria-selected', t.dataset.tab === name ? 'true' : 'false'); });
-    ['menu','shop','recipes'].forEach(function(n){ document.getElementById('view-'+n).hidden = n !== name; });
+    ['menu','shop','recipes','tips'].forEach(function(n){ document.getElementById('view-'+n).hidden = n !== name; });
   }
   Array.prototype.forEach.call(tabs, function(t){ t.addEventListener('click', function(){ showTab(t.dataset.tab); window.scrollTo(0,0); }); });
-  if (['menu','shop','recipes'].indexOf(state.tab) < 0) state.tab = 'menu';
+  if (['menu','shop','recipes','tips'].indexOf(state.tab) < 0) state.tab = 'menu';
   renderDay(); count(); showTab(state.tab);
 })();
 </script>
